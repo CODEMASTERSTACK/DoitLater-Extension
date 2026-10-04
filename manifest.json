@@ -1,0 +1,38 @@
+{
+  "manifest_version": 3,
+  "name": "Do It Later — Web Clipper & Thought Capture",
+  "version": "1.1.0",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAw7zZQ7f+ZSdK6b/UXwoardIYyT797VJYpBp6kpsPJZExS3QX4RbH4qcnXL/BIFVXqPUwY1y+Ohu4S1lr151S5rcBEeAAGUANGUZ4pIO0wMjAZdvk1QnDq3AYHhwLWFfBYWiXvl0orqtLg/qknClAXfs/ZKFPtrzpnjzMw5yoH6+r7KeFWr3b20Zv/jUPgO79/AslyjT8pZyGkkiPMcp2DQnn8YSlNN5BnO7fZyYlfhkh8c+Qxr0kgW0xyJistBEN1DqdxaIEP12N3A74IiJCAmSP71wepVuCFrnLfVyk2VuRST9vCoERMcmeLfxPp8HfLH92VTmNe0uXSNXXjRvPCwIDAQAB",
+  "description": "Highlight web articles, notes, and research, and dispatch them directly to your Do It Later mobile vault.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_title": "Open Do It Later Sidebar",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "side_panel": {
+    "default_path": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "permissions": [
+    "contextMenus",
+    "storage",
+    "activeTab",
+    "scripting",
+    "tabs",
+    "sidePanel"
+  ],
+  "host_permissions": [
+    "https://doitlater-api-proxy.kanasingh974.workers.dev/*"
+  ]
+}

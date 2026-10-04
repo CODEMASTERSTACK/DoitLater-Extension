@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Do It Later</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="app-container">
+
+    <!-- ============================================== -->
+    <!-- VIEW 1: DEDICATED 6-DIGIT CODE LOGIN SCREEN   -->
+    <!-- ============================================== -->
+    <div id="authScreen" class="screen-view">
+      <!-- Top Brand Bar -->
+      <header class="auth-header">
+        <div class="brand">
+          <img src="icons/icon48.png" alt="Do It Later" class="brand-img">
+          <div class="brand-text">
+            <span class="eyebrow">DESKTOP SIDEBAR</span>
+            <h1 class="brand-title">Do It <span>Later</span></h1>
+          </div>
+        </div>
+        <span class="status-pill-badge">CONNECTED</span>
+      </header>
+
+      <!-- Welcome Hero Card -->
+      <section class="auth-hero-card">
+        <div class="hero-icon-wrapper">
+          <img src="icons/icon128.png" alt="Do It Later Mascot" class="hero-mascot-img">
+        </div>
+        <h2 class="hero-title">Sync with Your Mobile Vault</h2>
+        <p class="hero-subtitle">
+          Park reading lists, code snippets, and sudden insights. Your phone will remember so your brain does not have to.
+        </p>
+      </section>
+
+      <!-- Feedback Area -->
+      <div id="authFeedback" class="feedback-msg hidden"></div>
+
+      <!-- 6-Digit Code Login Card -->
+      <section class="code-login-card">
+        <div class="section-label">
+          <span class="label-dot"></span>
+          <span class="label-text">ENTER 6-DIGIT SYNC CODE</span>
+        </div>
+
+        <input 
+          type="text" 
+          id="pairingCodeInput" 
+          class="neo-input code-login-input" 
+          placeholder="000 000" 
+          maxlength="7" 
+          autocomplete="off" 
+          spellcheck="false" 
+          autofocus
+        >
+
+        <button id="pairCodeBtn" class="neo-btn neo-btn-primary neo-btn-full">
+          <span>Connect Account</span>
+          <svg class="btn-svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </button>
+
+        <button id="stepsBtn" class="neo-btn neo-btn-sm neo-btn-yellow steps-action-btn">
+          <svg class="btn-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+          <span>Steps to Retrieve Code</span>
+        </button>
+      </section>
+
+      <!-- Steps Instructions Modal / Drawer -->
+      <div id="stepsDrawer" class="steps-drawer hidden">
+        <div class="steps-header">
+          <div class="steps-title-row">
+            <svg class="drawer-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
+            <span class="steps-title">How to Retrieve Your Code</span>
+          </div>
+          <button id="closeStepsBtn" class="steps-close-btn" aria-label="Close">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+          </button>
+        </div>
+        <ol class="steps-list">
+          <li>
+            <span class="step-num">1</span>
+            <span class="step-text">Open the <strong>Do It Later</strong> app on your mobile phone.</span>
+          </li>
+          <li>
+            <span class="step-num">2</span>
+            <span class="step-text">Sign in to your account.</span>
+          </li>
+          <li>
+            <span class="step-num">3</span>
+            <span class="step-text">Navigate to the <strong>Study</strong> tab and tap the circular <strong>Laptop terminal icon</strong> next to the search bar.</span>
+          </li>
+          <li>
+            <span class="step-num">4</span>
+            <span class="step-text">Your permanent 6-digit sync code is displayed. Enter it above to connect.</span>
+          </li>
+        </ol>
+      </div>
+    </div>
+
+
+    <!-- ============================================== -->
+    <!-- VIEW 2: MAIN WORKSPACE & CLIPPER SCREEN        -->
+    <!-- ============================================== -->
+    <div id="mainScreen" class="screen-view hidden">
+      <!-- Main Top Header -->
+      <header class="header">
+        <div class="brand">
+          <img src="icons/icon48.png" alt="Do It Later" class="brand-img">
+          <div class="brand-text">
+            <span class="eyebrow">DESKTOP DISPATCH</span>
+            <h1 class="brand-title">Do It <span>Later</span></h1>
+          </div>
+        </div>
+        <button id="signOutBtn" class="neo-btn neo-btn-sm text-btn-danger">Sign Out</button>
+      </header>
+
+      <!-- Account Status Banner -->
+      <div id="accountBanner" class="account-banner">
+        <div class="account-info">
+          <div class="status-dot"></div>
+          <div class="account-meta">
+            <span class="account-email" id="userEmailDisplay">Signed in</span>
+            <span class="account-hint">Connected to mobile vault</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Segmented Navigation Bar -->
+      <nav class="nav-segmented" id="navSegmented">
+        <button class="nav-tab active" data-tab="capture">
+          <svg class="tab-svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+          <span>Capture</span>
+        </button>
+        <button class="nav-tab" data-tab="staged">
+          <svg class="tab-svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+          <span>Staged</span>
+          <span class="tab-badge" id="stagedTabBadge">0</span>
+        </button>
+        <button class="nav-tab" data-tab="history">
+          <svg class="tab-svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span>History</span>
+          <span class="tab-badge neutral" id="historyTabBadge">0</span>
+        </button>
+      </nav>
+
+      <!-- TAB 1: QUICK CAPTURE VIEW -->
+      <section id="captureTabView" class="tab-pane">
+        <div class="capture-card">
+          <div class="section-label">
+            <span class="label-dot"></span>
+            <span class="label-text">CLIP FROM ACTIVE TAB</span>
+          </div>
+
+          <div class="page-source-pill" id="pageSourcePill">
+            <svg class="source-svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" x2="22" y1="12" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            <span class="source-domain" id="pageDomain">Detecting tab...</span>
+          </div>
+
+          <!-- Dynamic Auto-Expanding Title Textarea -->
+          <textarea 
+            id="clipTitleInput" 
+            class="neo-textarea neo-title-textarea" 
+            rows="1" 
+            placeholder="Title (expands as you type)"
+            spellcheck="false"
+          ></textarea>
+          
+          <textarea 
+            id="clipSnippetInput" 
+            class="neo-textarea" 
+            rows="4" 
+            placeholder="Highlight text on the page or compose your thoughts here..."
+          ></textarea>
+
+          <!-- Category Selector -->
+          <div class="category-chips" id="categoryChips">
+            <button class="chip active" data-category="Research">Research</button>
+            <button class="chip" data-category="Work">Work</button>
+            <button class="chip" data-category="Reading">Reading</button>
+            <button class="chip" data-category="Quick Action">Quick Action</button>
+            <button class="chip" data-category="Idea">Idea</button>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="dual-action-row">
+            <button id="sendToAppBtn" class="neo-btn neo-btn-primary flex-1">
+              <svg class="btn-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              <span>Send to Mobile</span>
+            </button>
+            <button id="stageBtn" class="neo-btn neo-btn-secondary" title="Save to Staged queue for later review">
+              <svg class="btn-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+              <span>Stage</span>
+            </button>
+          </div>
+
+          <div id="sendFeedback" class="feedback-msg hidden"></div>
+        </div>
+      </section>
+
+      <!-- TAB 2: STAGED FOR REVIEW -->
+      <section id="stagedTabView" class="tab-pane hidden">
+        <div class="staged-section">
+          <div class="section-header">
+            <div class="section-label">
+              <span class="label-dot sage"></span>
+              <span class="label-text">STAGED TO REVIEW (<span id="stagedCount">0</span>)</span>
+            </div>
+            <button id="sendAllBtn" class="neo-btn neo-btn-xs neo-btn-primary hidden">
+              <span>Send All</span>
+              <svg class="btn-svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+          </div>
+
+          <div id="stagedFeedback" class="feedback-msg hidden"></div>
+
+          <div id="stagedClipsList" class="staged-list">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: HISTORY ARCHIVE -->
+      <section id="historyTabView" class="tab-pane hidden">
+        <div class="history-section">
+          <div class="section-header">
+            <div class="section-label">
+              <span class="label-dot blue"></span>
+              <span class="label-text">DISPATCH HISTORY</span>
+            </div>
+            <button id="clearHistoryBtn" class="text-btn danger hidden">Clear Archive</button>
+          </div>
+
+          <div id="historyFeedback" class="feedback-msg hidden"></div>
+
+          <div id="historyClipsList" class="history-list">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer Notice -->
+      <footer class="footer">
+        <div class="footer-tip">
+          <svg class="tip-svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+          <span class="footer-hint">Select any text on a page, right-click, and choose <strong>Save to Do It Later</strong>.</span>
+        </div>
+      </footer>
+    </div>
+
+  </div>
+
+  <script type="module" src="popup.js"></script>
+</body>
+</html>
