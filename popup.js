@@ -451,14 +451,14 @@ async function updateBadgeCounters() {
   const data = await chrome.storage.local.get(['stagedClips', 'historyClips', 'cachedThoughts']);
   const staged = data.stagedClips || [];
   const history = data.historyClips || [];
-  const thoughts = data.cachedThoughts || [];
+  const thoughts = (data.cachedThoughts || []).filter(t => !t.isCompleted);
 
   stagedTabBadge.textContent = staged.length;
   stagedCount.textContent = staged.length;
   historyTabBadge.textContent = history.length;
-  if (thoughtsTabBadge && thoughts.length > 0) {
+  if (thoughtsTabBadge) {
     thoughtsTabBadge.textContent = thoughts.length;
-    thoughtsTabBadge.style.display = 'inline-block';
+    thoughtsTabBadge.style.display = thoughts.length > 0 ? 'inline-block' : 'none';
   }
 }
 
@@ -876,11 +876,11 @@ async function loadThoughtsView(forceRefresh = false) {
   if (!forceRefresh) {
     const cached = await chrome.storage.local.get(['cachedThoughts']);
     if (cached.cachedThoughts && Array.isArray(cached.cachedThoughts) && cached.cachedThoughts.length > 0) {
-      allThoughts = cached.cachedThoughts;
+      allThoughts = cached.cachedThoughts.filter(t => !t.isCompleted);
       renderThoughtsList();
       if (thoughtsTabBadge) {
         thoughtsTabBadge.textContent = allThoughts.length;
-        thoughtsTabBadge.style.display = 'inline-block';
+        thoughtsTabBadge.style.display = allThoughts.length > 0 ? 'inline-block' : 'none';
       }
     }
   }
@@ -889,12 +889,12 @@ async function loadThoughtsView(forceRefresh = false) {
   try {
     const res = await fetchUserThoughts(currentUser.uid, currentUser.firebaseIdToken || null);
     if (res && res.thoughts) {
-      allThoughts = res.thoughts;
+      allThoughts = res.thoughts.filter(t => !t.isCompleted);
       await chrome.storage.local.set({ cachedThoughts: allThoughts });
       renderThoughtsList();
       if (thoughtsTabBadge) {
         thoughtsTabBadge.textContent = allThoughts.length;
-        thoughtsTabBadge.style.display = 'inline-block';
+        thoughtsTabBadge.style.display = allThoughts.length > 0 ? 'inline-block' : 'none';
       }
     }
   } catch (err) {
@@ -923,6 +923,10 @@ function renderThoughtsList() {
     const currentTabUrl = currentActiveTab?.url || '';
 
   const filtered = allThoughts.filter((thought) => {
+    // Exclude thoughts in Went through
+    if (thought.isCompleted === true || thought.isCompleted === 'true') {
+      return false;
+    }
     // Filter by category or type
     if (selectedThoughtFilter === 'study') {
       const isStudyType = ['study', 'note', 'idea'].includes((thought.type || '').toLowerCase());
