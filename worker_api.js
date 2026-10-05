@@ -84,3 +84,56 @@ export async function pairWithCode(code) {
 
   return await response.json();
 }
+
+/**
+ * Fetches user thoughts from Firestore via Cloudflare Worker.
+ */
+export async function fetchUserThoughts(userId, idToken = null) {
+  const url = new URL(`${WORKER_BASE_URL}/extension/thoughts`);
+  url.searchParams.set('uid', userId);
+  if (idToken) url.searchParams.set('idToken', idToken);
+
+  const response = await fetch(url.toString(), {
+    method: 'GET',
+    headers: {
+      'X-App-Client': CLIENT_HEADER,
+    },
+  });
+
+  if (!response.ok) {
+    const err = await response.json().catch(() => ({}));
+    throw new Error(err.error || `Failed to fetch thoughts with status ${response.status}`);
+  }
+
+  return await response.json();
+}
+
+/**
+ * Links a web source (URL, title, domain, snippet, favicon) to an existing thought card.
+ */
+export async function linkSourceToThought(userId, thoughtId, linkData, idToken = null, thoughtTitle = null) {
+  const url = `${WORKER_BASE_URL}/extension/thoughts/link`;
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-App-Client': CLIENT_HEADER,
+    },
+    body: JSON.stringify({
+      uid: userId,
+      thoughtId,
+      thoughtTitle,
+      link: linkData,
+      idToken,
+    }),
+  });
+
+  if (!response.ok) {
+    const err = await response.json().catch(() => ({}));
+    throw new Error(err.error || `Failed to link source with status ${response.status}`);
+  }
+
+  return await response.json();
+}
+

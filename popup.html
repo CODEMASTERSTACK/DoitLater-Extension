@@ -137,6 +137,11 @@
           <svg class="tab-svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
           <span>Capture</span>
         </button>
+        <button class="nav-tab" data-tab="thoughts">
+          <svg class="tab-svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"/><line x1="9" x2="15" y1="21" y2="21"/></svg>
+          <span>Thoughts</span>
+          <span class="tab-badge" id="thoughtsTabBadge" style="display: none;">0</span>
+        </button>
         <button class="nav-tab" data-tab="staged">
           <svg class="tab-svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
           <span>Staged</span>
@@ -199,11 +204,73 @@
             </button>
           </div>
 
+          <!-- Secondary Link Existing Action -->
+          <button id="linkCurrentToThoughtBtn" class="neo-btn neo-btn-bento-subtle w-full" style="margin-top: 8px;">
+            <svg class="btn-svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            <span>Link Current Tab to Existing Thought</span>
+          </button>
+
           <div id="sendFeedback" class="feedback-msg hidden"></div>
         </div>
       </section>
 
-      <!-- TAB 2: STAGED FOR REVIEW -->
+      <!-- TAB 2: THOUGHTS EXPLORER & COMPANION LINKER -->
+      <section id="thoughtsTabView" class="tab-pane hidden">
+        <div class="thoughts-section">
+          <!-- Active Tab Linker Banner -->
+          <div class="active-tab-banner" id="activeTabBanner" title="Click to refresh active tab detection">
+            <div class="banner-top">
+              <span class="banner-badge" id="thoughtsBannerBadge">ACTIVE TAB READY</span>
+              <div class="banner-domain-row">
+                <span class="banner-domain" id="thoughtsActiveDomain">Detecting tab...</span>
+                <svg class="banner-refresh-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+              </div>
+            </div>
+            <div class="banner-title" id="thoughtsActiveTitle">Capturing page title...</div>
+            <div class="banner-quote-preview hidden" id="thoughtsQuotePreview">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z"/></svg>
+              <span id="thoughtsQuoteText"></span>
+            </div>
+          </div>
+
+          <!-- Search & Filter Controls -->
+          <div class="thoughts-controls">
+            <div class="search-input-wrapper">
+              <svg class="search-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              <input 
+                type="text" 
+                id="thoughtsSearchInput" 
+                class="neo-input search-input" 
+                placeholder="Search thoughts, tags, or links..."
+                spellcheck="false"
+              >
+              <button id="clearThoughtsSearchBtn" class="clear-search-btn hidden" aria-label="Clear search">×</button>
+            </div>
+
+            <div class="type-filter-chips" id="thoughtsTypeFilter">
+              <button class="type-chip active" data-type="all">All</button>
+              <button class="type-chip" data-type="study">Study</button>
+              <button class="type-chip" data-type="deepWork">Deep Work</button>
+              <button class="type-chip" data-type="linked">Has Links</button>
+              <button id="refreshThoughtsBtn" class="refresh-thoughts-btn" title="Refresh thoughts">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div id="thoughtsFeedback" class="feedback-msg hidden"></div>
+
+          <!-- Thought Cards Stream -->
+          <div id="thoughtsListContainer" class="thoughts-list">
+            <div class="loading-state">
+              <div class="loading-spinner"></div>
+              <span>Syncing thoughts from mobile vault...</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: STAGED FOR REVIEW -->
       <section id="stagedTabView" class="tab-pane hidden">
         <div class="staged-section">
           <div class="section-header">
@@ -225,7 +292,7 @@
         </div>
       </section>
 
-      <!-- TAB 3: HISTORY ARCHIVE -->
+      <!-- TAB 4: HISTORY ARCHIVE -->
       <section id="historyTabView" class="tab-pane hidden">
         <div class="history-section">
           <div class="section-header">
